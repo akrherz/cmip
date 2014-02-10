@@ -25,7 +25,8 @@ for i in $(seq 1981 2000); do
 	#wget ftp://gdo-dcp.ucllnl.org/pub/dcp/archive/bcsd/yearly/cccma_cgcm3_1.1/cccma_cgcm3_1.1.sresa1b.monthly.Prcp.${i}.nc
 	#wget ftp://gdo-dcp.ucllnl.org/pub/dcp/archive/bcsd/yearly/gfdl_cm2_0.1/gfdl_cm2_0.1.sresa1b.monthly.Prcp.${i}.nc
 	#wget ftp://gdo-dcp.ucllnl.org/pub/dcp/archive/bcsd/yearly/gfdl_cm2_1.1/gfdl_cm2_1.1.sresa1b.monthly.Prcp.${i}.nc
-	wget ftp://gdo-dcp.ucllnl.org/pub/dcp/archive/bcsd/yearly/mpi_echam5.1/mpi_echam5.1.sresa1b.monthly.Prcp.${i}.nc
+	#wget ftp://gdo-dcp.ucllnl.org/pub/dcp/archive/bcsd/yearly/mpi_echam5.1/mpi_echam5.1.sresa1b.monthly.Prcp.${i}.nc
 
-
+	wget ftp://gdo-dcp.ucllnl.org/pub/dcp/archive/bcca/obs/pr/2deg/gridded_obs.pr.OBS_2deg.daily.${i}.nc
+	#wget ftp://gdo-dcp.ucllnl.org/pub/dcp/archive/cmip5/obs/day/pr/aggr_1deg_gridded_obs.daily.pr.${i}.nc
 done
