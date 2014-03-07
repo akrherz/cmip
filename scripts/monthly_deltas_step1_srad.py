@@ -11,26 +11,19 @@ import netCDF4
 import datetime
 import numpy
 from scipy import interpolate
+import util
 
-t0 = datetime.datetime(1850,1,1)
 
-def find_time_idx(nc, needle):
-    times = nc.variables['time'][:]
-    for i, time in enumerate(times):
-        ts = t0 + datetime.timedelta(days=time)
-        if ts.year == needle.year and ts.month == needle.month:
-            return i
-    return None
-
-nc_20c = netCDF4.Dataset('pcmdi.ipcc4.miroc3_2_medres.20c3m.run1.monthly.rsds_A1.nc')
-nc_a1b = netCDF4.Dataset('pcmdi.ipcc4.miroc3_2_medres.sresa1b.run1.monthly.rsds_A1.nc')
+nc_20c = netCDF4.Dataset('../hadcm3/20c3m/rsds_A1.nc')
+nc_a1b = netCDF4.Dataset('../hadcm3/sresa1b/rsds_A1.nc')
 lats = nc_20c.variables['lat'][:]
 lons = nc_20c.variables['lon'][:]
 
-idx1_20c = find_time_idx(nc_20c, datetime.datetime(1981,1,1) )
-idx2_20c = find_time_idx(nc_20c, datetime.datetime(2000,12,1) ) + 1
-idx1_a1b = find_time_idx(nc_a1b, datetime.datetime(2046,1,1) )
-idx2_a1b = find_time_idx(nc_a1b, datetime.datetime(2065,12,1) ) + 1
+print 'HADCM3 HACK HERE!'
+idx1_20c = util.find_time_idx(nc_20c, datetime.datetime(1981,1,1) )
+idx2_20c = util.find_time_idx(nc_20c, datetime.datetime(1999,12,1) ) + 1
+idx1_a1b = util.find_time_idx(nc_a1b, datetime.datetime(2046,1,1) )
+idx2_a1b = util.find_time_idx(nc_a1b, datetime.datetime(2064,12,1) ) + 1
 
 rsds_20c = nc_20c.variables['rsds'][idx1_20c:idx2_20c,:,:]
 rsds_a1b = nc_a1b.variables['rsds'][idx1_a1b:idx2_a1b,:,:]
@@ -44,7 +37,7 @@ jun = numpy.average(rsds_a1b[5::12,:,:],0) - numpy.average(rsds_20c[5::12,:,:],0
 jul = numpy.average(rsds_a1b[6::12,:,:],0) - numpy.average(rsds_20c[6::12,:,:],0)
 aug = numpy.average(rsds_a1b[7::12,:,:],0) - numpy.average(rsds_20c[7::12,:,:],0)
 sep = numpy.average(rsds_a1b[8::12,:,:],0) - numpy.average(rsds_20c[8::12,:,:],0)
-oct = numpy.average(rsds_a1b[9::12,:,:],0) - numpy.average(rsds_20c[9::12,:,:],0)
+october = numpy.average(rsds_a1b[9::12,:,:],0) - numpy.average(rsds_20c[9::12,:,:],0)
 nov = numpy.average(rsds_a1b[10::12,:,:],0) - numpy.average(rsds_20c[10::12,:,:],0)
 dec = numpy.average(rsds_a1b[11::12,:,:],0) - numpy.average(rsds_20c[11::12,:,:],0)
 
@@ -57,14 +50,14 @@ jun_T = interpolate.RectBivariateSpline(lats, lons, jun)
 jul_T = interpolate.RectBivariateSpline(lats, lons, jul)
 aug_T = interpolate.RectBivariateSpline(lats, lons, aug)
 sep_T = interpolate.RectBivariateSpline(lats, lons, sep)
-oct_T = interpolate.RectBivariateSpline(lats, lons, oct)
+oct_T = interpolate.RectBivariateSpline(lats, lons, october)
 nov_T = interpolate.RectBivariateSpline(lats, lons, nov)
 dec_T = interpolate.RectBivariateSpline(lats, lons, dec)
 
 
 
-o = open('WG_SWAT2009_F_SRAD.csv', 'w')
-for i, line in enumerate(open('WG_SWAT2009.csv')):
+o = open('../hadcm3/WG_SWAT2009_F_SRAD.csv', 'w')
+for i, line in enumerate(open('../swat/WG_SWAT2009.csv')):
     if i == 0:
         o.write(line)
         continue

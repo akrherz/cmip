@@ -35,29 +35,22 @@ import netCDF4
 import datetime
 import numpy
 from scipy import interpolate
+import util
 
-t0 = datetime.datetime(1850,1,1)
 
-def find_time_idx(nc, needle):
-    times = nc.variables['time'][:]
-    for i, time in enumerate(times):
-        ts = t0 + datetime.timedelta(days=time)
-        if ts.year == needle.year and ts.month == needle.month:
-            return i
-    return None
-
-nc_20c_ps = netCDF4.Dataset('pcmdi.ipcc4.miroc3_2_medres.20c3m.run1.monthly.ps_A1.nc')
-nc_20c_huss = netCDF4.Dataset('pcmdi.ipcc4.miroc3_2_medres.20c3m.run1.monthly.huss_A1.nc')
-nc_a1b_ps = netCDF4.Dataset('pcmdi.ipcc4.miroc3_2_medres.sresa1b.run1.monthly.ps_A1.nc')
-nc_a1b_huss = netCDF4.Dataset('pcmdi.ipcc4.miroc3_2_medres.sresa1b.run1.monthly.huss_A1.nc')
+nc_20c_ps = netCDF4.Dataset('../hadcm3/20c3m/ps_A1.nc')
+nc_20c_huss = netCDF4.Dataset('../hadcm3/20c3m/huss_A1.nc')
+nc_a1b_ps = netCDF4.Dataset('../hadcm3/sresa1b/ps_A1.nc')
+nc_a1b_huss = netCDF4.Dataset('../hadcm3/sresa1b/huss_A1.nc')
 
 lats = nc_20c_ps.variables['lat'][:]
 lons = nc_20c_ps.variables['lon'][:]
 
-idx1_20c = find_time_idx(nc_20c_ps, datetime.datetime(1981,1,1) )
-idx2_20c = find_time_idx(nc_20c_ps, datetime.datetime(2000,12,1) ) + 1
-idx1_a1b = find_time_idx(nc_a1b_ps, datetime.datetime(2046,1,1) )
-idx2_a1b = find_time_idx(nc_a1b_ps, datetime.datetime(2065,12,1) ) + 1
+print 'HADCM3 HACK HERE!'
+idx1_20c = util.find_time_idx(nc_20c_ps, datetime.datetime(1981,1,1) )
+idx2_20c = util.find_time_idx(nc_20c_ps, datetime.datetime(1999,12,1) ) + 1
+idx1_a1b = util.find_time_idx(nc_a1b_ps, datetime.datetime(2046,1,1) )
+idx2_a1b = util.find_time_idx(nc_a1b_ps, datetime.datetime(2064,12,1) ) + 1
 
 ps_20c = nc_20c_ps.variables['ps'][idx1_20c:idx2_20c,:,:] / 100.0
 huss_20c = nc_20c_huss.variables['huss'][idx1_20c:idx2_20c,:,:]
@@ -130,7 +123,7 @@ jun = a1b_jun_td - c20_jun_td
 jul = a1b_jul_td - c20_jul_td
 aug = a1b_aug_td - c20_aug_td
 sep = a1b_sep_td - c20_sep_td
-oct = a1b_oct_td - c20_oct_td
+october = a1b_oct_td - c20_oct_td
 nov = a1b_nov_td - c20_nov_td
 dec = a1b_dec_td - c20_dec_td
 
@@ -143,14 +136,14 @@ jun_T = interpolate.RectBivariateSpline(lats, lons, jun)
 jul_T = interpolate.RectBivariateSpline(lats, lons, jul)
 aug_T = interpolate.RectBivariateSpline(lats, lons, aug)
 sep_T = interpolate.RectBivariateSpline(lats, lons, sep)
-oct_T = interpolate.RectBivariateSpline(lats, lons, oct)
+oct_T = interpolate.RectBivariateSpline(lats, lons, october)
 nov_T = interpolate.RectBivariateSpline(lats, lons, nov)
 dec_T = interpolate.RectBivariateSpline(lats, lons, dec)
 
 
 
-o = open('WG_SWAT2009_F_SRAD_WND_DEW.csv', 'w')
-for i, line in enumerate(open('WG_SWAT2009_F_SRAD_WND.csv')):
+o = open('../hadcm3/WG_SWAT2009_F_SRAD_WND_DEW.csv', 'w')
+for i, line in enumerate(open('../hadcm3/WG_SWAT2009_F_SRAD_WND.csv')):
     if i == 0:
         o.write(line)
         continue
