@@ -13,15 +13,15 @@ import numpy
 from scipy import interpolate
 import util
 
+model = "cnrm_cm3"
 
-nc_20c_uas = netCDF4.Dataset('../hadcm3/20c3m/uas_A1.nc')
-nc_20c_vas = netCDF4.Dataset('../hadcm3/20c3m/vas_A1.nc')
-nc_a1b_uas = netCDF4.Dataset('../hadcm3/sresa1b/uas_A1.nc')
-nc_a1b_vas = netCDF4.Dataset('../hadcm3/sresa1b/vas_A1.nc')
+nc_20c_uas = netCDF4.Dataset('../%s/20c3m/uas_A1.nc' % (model,))
+nc_20c_vas = netCDF4.Dataset('../%s/20c3m/vas_A1.nc' % (model,))
+nc_a1b_uas = netCDF4.Dataset('../%s/sresa1b/uas_A1_2000_2299.nc' % (model,))
+nc_a1b_vas = netCDF4.Dataset('../%s/sresa1b/vas_A1_2000_2299.nc' % (model,))
 lats = nc_20c_uas.variables['lat'][:]
 lons = nc_20c_uas.variables['lon'][:]
 
-print 'HADCM3 HACK HERE!'
 idx1_20c = util.find_time_idx(nc_20c_uas, datetime.datetime(1981,1,1) )
 idx2_20c = util.find_time_idx(nc_20c_uas, datetime.datetime(1999,12,1) ) + 1
 idx1_a1b = util.find_time_idx(nc_a1b_uas, datetime.datetime(2046,1,1) )
@@ -62,8 +62,8 @@ dec_T = interpolate.RectBivariateSpline(lats, lons, dec)
 
 
 
-o = open('../hadcm3/WG_SWAT2009_F_SRAD_WND.csv', 'w')
-for i, line in enumerate(open('../hadcm3/WG_SWAT2009_F_SRAD.csv')):
+o = open('../%s/WG_SWAT2009_F_SRAD_WND.csv' % (model,), 'w')
+for i, line in enumerate(open('../%s/WG_SWAT2009_F_SRAD.csv' % (model,))):
     if i == 0:
         o.write(line)
         continue
