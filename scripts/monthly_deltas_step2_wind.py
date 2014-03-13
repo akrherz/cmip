@@ -16,10 +16,10 @@ import sys
 
 model = sys.argv[1]
 
-nc_20c_uas = netCDF4.Dataset('../%s/20c3m/uas_A1.nc' % (model,))
-nc_20c_vas = netCDF4.Dataset('../%s/20c3m/vas_A1.nc' % (model,))
-nc_a1b_uas = netCDF4.Dataset('../%s/sresa1b/uas_A1.nc' % (model,))
-nc_a1b_vas = netCDF4.Dataset('../%s/sresa1b/vas_A1.nc' % (model,))
+nc_20c_uas = netCDF4.Dataset('../%s/20c3m/uas_A1_1860-2000.nc' % (model,))
+nc_20c_vas = netCDF4.Dataset('../%s/20c3m/vas_A1_1860-2000.nc' % (model,))
+nc_a1b_uas = netCDF4.Dataset('../%s/sresa1b/uas_A1_2000-2100.nc' % (model,))
+nc_a1b_vas = netCDF4.Dataset('../%s/sresa1b/vas_A1_2000-2100.nc' % (model,))
 lats = nc_20c_uas.variables['lat'][:]
 lons = nc_20c_uas.variables['lon'][:]
 

@@ -23,7 +23,7 @@ days4 = (datetime.datetime(2065,1,1) - basets).days
 offset1, offset2 = numpy.digitize([days1,days2], obs_nc.variables['time'][:])
 offset3, offset4 = numpy.digitize([days3,days4], fut_nc.variables['time'][:])
 
-output = open('../%s/monthly_deltas.csv' % (model,), 'w')
+output = open('../%s/%s_temp_precip_deltas.csv' % (model, model), 'w')
 output.write("LON,LAT,JAN_T_DEL,FEB_T_DEL,MAR_T_DEL,APR_T_DEL,MAY_T_DEL,JUN_T_DEL,JUL_T_DEL,AUG_T_DEL,SEP_T_DEL,OCT_T_DEL,NOV_T_DEL,DEC_T_DEL,JAN_P_MUL,FEB_P_MUL,MAR_P_MUL,APR_P_MUL,MAY_P_MUL,JUN_P_MUL,JUL_P_MUL,AUG_P_MUL,SEP_P_MUL,OCT_P_MUL,NOV_P_MUL,DEC_P_MUL,\n")
 
 pratio = numpy.zeros( (12, len(obs_nc.variables['latitude']), len(obs_nc.variables['longitude'])))
