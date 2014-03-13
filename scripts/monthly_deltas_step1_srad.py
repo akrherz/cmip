@@ -13,10 +13,10 @@ import numpy
 from scipy import interpolate
 import util
 
-model = "csiro"
+model = "bccr_bcm2_0"
 
-nc_20c = netCDF4.Dataset('../%s/20c3m/rsds_A1.nc' % (model,))
-nc_a1b = netCDF4.Dataset('../%s/sresa1b/rsds_A1.nc' % (model,))
+nc_20c = netCDF4.Dataset('../%s/20c3m/rsds_A1_2.nc' % (model,))
+nc_a1b = netCDF4.Dataset('../%s/sresa1b/rsds_A1_1.nc' % (model,))
 lats = nc_20c.variables['lat'][:]
 lons = nc_20c.variables['lon'][:]
 

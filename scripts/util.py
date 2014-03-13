@@ -3,7 +3,8 @@ import datetime
 def find_time_idx(nc, needle):
     ''' Find the time index '''
     tm = nc.variables['time']
-    t0 = datetime.datetime.strptime(tm.units.replace("days since ", ""), '%Y-%m-%d')
+    tstr = tm.units.replace("days since ", "")
+    t0 = datetime.datetime.strptime(tstr.split()[0], '%Y-%m-%d')
     cal360 = True if tm.calendar == '360_day' else False
     cal365 = True if tm.calendar == '365_day' else False
     times = tm[:]
@@ -17,7 +18,6 @@ def find_time_idx(nc, needle):
             years = int( time / 365 )
             months = int((time % 365) / 30 )
             ts = datetime.datetime(t0.year + years, 1 + months, 1)
-            #print i, t0, ts, time, years, months
         else:
             ts = t0 + datetime.timedelta(days=time)
         if ts.year == needle.year and ts.month == needle.month:

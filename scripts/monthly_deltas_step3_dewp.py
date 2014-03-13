@@ -37,12 +37,12 @@ import numpy as np
 from scipy import interpolate
 import util
 
-model = "cnrm_cm3"
+model = "bccr_bcm2_0"
 
-nc_20c_ps = netCDF4.Dataset('../%s/20c3m/ps_A1.nc' % (model,))
-nc_20c_huss = netCDF4.Dataset('../%s/20c3m/huss_A1.nc' % (model,))
-nc_a1b_ps = netCDF4.Dataset('../%s/sresa1b/ps_A1.nc' % (model,))
-nc_a1b_huss = netCDF4.Dataset('../%s/sresa1b/huss_A1_2000_2299.nc' % (model,))
+nc_20c_ps = netCDF4.Dataset('../%s/20c3m/ps_A1_2.nc' % (model,))
+nc_20c_huss = netCDF4.Dataset('../%s/20c3m/huss_A1_2.nc' % (model,))
+nc_a1b_ps = netCDF4.Dataset('../%s/sresa1b/ps_A1_1.nc' % (model,))
+nc_a1b_huss = netCDF4.Dataset('../%s/sresa1b/huss_A1_1.nc' % (model,))
 
 lats = nc_20c_ps.variables['lat'][:]
 lons = nc_20c_ps.variables['lon'][:]
