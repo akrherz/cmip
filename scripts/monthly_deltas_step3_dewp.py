@@ -56,12 +56,14 @@ ps_20c = nc_20c_ps.variables['ps'][idx1_20c:idx2_20c,:,:] / 100.0
 huss_20c = nc_20c_huss.variables['huss'][idx1_20c:idx2_20c,:,:]
 r_20c = huss_20c / (1 - huss_20c)
 e_20c = r_20c * ps_20c / (0.622 + r_20c)
+e_20c = np.where(e_20c < 0.00000001, 0.00000001, e_20c)
 
 print np.shape(nc_a1b_ps.variables['ps'][:]), idx1_20c, idx2_20c
-ps_a1b = nc_a1b_ps.variables['ps'][idx1_20c:idx2_20c,:,:] / 100.0
-huss_a1b = nc_a1b_huss.variables['huss'][idx1_20c:idx2_20c,:,:]
+ps_a1b = nc_a1b_ps.variables['ps'][idx1_a1b:idx2_a1b,:,:] / 100.0
+huss_a1b = nc_a1b_huss.variables['huss'][idx1_a1b:idx2_a1b,:,:]
 r_a1b = huss_a1b / (1 - huss_a1b)
 e_a1b = r_a1b * ps_a1b / (0.622 + r_a1b)
+e_a1b = np.where(e_a1b < 0.00000001, 0.00000001, e_a1b)
 
 a1b_jan = np.average(e_a1b[::12,:,:],0)
 a1b_feb = np.average(e_a1b[1::12,:,:],0)
@@ -69,6 +71,12 @@ a1b_mar = np.average(e_a1b[2::12,:,:],0)
 a1b_apr = np.average(e_a1b[3::12,:,:],0)
 a1b_may = np.average(e_a1b[4::12,:,:],0)
 a1b_jun = np.average(e_a1b[5::12,:,:],0)
+for i in range(5, e_a1b.shape[0]+1,12):
+    print 'e', i, np.min(e_a1b[i,:,:]), np.max(e_a1b[i,:,:])
+    print 'ps', i, np.min(ps_a1b[i,:,:]), np.max(ps_a1b[i,:,:])
+    print 'huss', i, np.min(huss_a1b[i,:,:]), np.max(huss_a1b[i,:,:])
+print '-->a1b_jun', np.min(a1b_jun[:,:]), np.max(a1b_jun[:,:])
+
 a1b_jul = np.average(e_a1b[6::12,:,:],0)
 a1b_aug = np.average(e_a1b[7::12,:,:],0)
 a1b_sep = np.average(e_a1b[8::12,:,:],0)

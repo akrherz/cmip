@@ -13,7 +13,7 @@ import numpy
 from scipy import interpolate
 import util
 
-model = "cnrm_cm3"
+model = "csiro"
 
 nc_20c = netCDF4.Dataset('../%s/20c3m/rsds_A1.nc' % (model,))
 nc_a1b = netCDF4.Dataset('../%s/sresa1b/rsds_A1.nc' % (model,))
