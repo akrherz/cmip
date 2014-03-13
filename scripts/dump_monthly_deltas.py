@@ -4,13 +4,14 @@
 import netCDF4
 import datetime
 import numpy
+import sys
 
-model = 'cnrm_cm3.1'
+model = sys.argv[1]
 
-obs_nc = netCDF4.Dataset('../bcsd3/sresa1b.%s.monthly.Tavg.1950-2099.nc' % (model,))
-fut_nc = netCDF4.Dataset('../bcsd3/sresa1b.%s.monthly.Tavg.1950-2099.nc' % (model,))
-p_obs_nc = netCDF4.Dataset('../bcsd3/sresa1b.%s.monthly.Prcp.1950-2099.nc' % (model,))
-p_fut_nc = netCDF4.Dataset('../bcsd3/sresa1b.%s.monthly.Prcp.1950-2099.nc' % (model,))
+obs_nc = netCDF4.Dataset('../bcsd3/sresa1b.%s.1.monthly.Tavg.1950-2099.nc' % (model,))
+fut_nc = netCDF4.Dataset('../bcsd3/sresa1b.%s.1.monthly.Tavg.1950-2099.nc' % (model,))
+p_obs_nc = netCDF4.Dataset('../bcsd3/sresa1b.%s.1.monthly.Prcp.1950-2099.nc' % (model,))
+p_fut_nc = netCDF4.Dataset('../bcsd3/sresa1b.%s.1.monthly.Prcp.1950-2099.nc' % (model,))
 
 basets = datetime.datetime(1950,1,1)
 days1 = (datetime.datetime(1981,1,1) - basets).days
