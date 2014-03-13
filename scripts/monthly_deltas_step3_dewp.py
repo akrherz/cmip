@@ -36,13 +36,14 @@ import datetime
 import numpy as np
 from scipy import interpolate
 import util
+import sys
 
-model = "bccr_bcm2_0"
+model = sys.argv[1]
 
-nc_20c_ps = netCDF4.Dataset('../%s/20c3m/ps_A1_2.nc' % (model,))
-nc_20c_huss = netCDF4.Dataset('../%s/20c3m/huss_A1_2.nc' % (model,))
-nc_a1b_ps = netCDF4.Dataset('../%s/sresa1b/ps_A1_1.nc' % (model,))
-nc_a1b_huss = netCDF4.Dataset('../%s/sresa1b/huss_A1_1.nc' % (model,))
+nc_20c_ps = netCDF4.Dataset('../%s/20c3m/ps_A1.nc' % (model,))
+nc_20c_huss = netCDF4.Dataset('../%s/20c3m/huss_A1.nc' % (model,))
+nc_a1b_ps = netCDF4.Dataset('../%s/sresa1b/ps_A1.nc' % (model,))
+nc_a1b_huss = netCDF4.Dataset('../%s/sresa1b/huss_A1.nc' % (model,))
 
 lats = nc_20c_ps.variables['lat'][:]
 lons = nc_20c_ps.variables['lon'][:]
