@@ -39,23 +39,24 @@ def do(lon, lat, station):
     xdata = tasmax_nc.variables['tmax'][t0idx:t1idx,jdx,idx]
     ndata = tasmin_nc.variables['tmin'][t0idx:t1idx,jdx,idx]
 
-    highs = temperature(xdata, 'K').value('F')
-    lows = temperature(ndata, 'K').value('F')
+    highs = temperature(xdata, 'C').value('F')
+    lows = temperature(ndata, 'C').value('F')
     precips = pdata / 24.5
 
 
     now = t0
     k = 0
     while now < t1:
-        high = highs[k]
-        low = lows[k]
-        precip = precips[k]
-        if highs.mask[k]:
-            high = None
-        if lows.mask[k]:
-            low = None
-        if precips.mask[k]:
-            precip = None
+        high = float(highs[k])
+        low = float(lows[k])
+        precip = float(precips[k])
+        #print now, high, low, precip
+        #if highs.mask[k]:
+        #    high = None
+        #if lows.mask[k]:
+        #    low = None
+        #if precips.mask[k]:
+        #    precip = None
         cursor.execute("""
         INSERT into hayhoe_daily(model, scenario, station, day, high, low,
         precip) values (%s, %s, %s, %s, %s, %s, %s)
@@ -63,7 +64,7 @@ def do(lon, lat, station):
         k += 1
         now += datetime.timedelta(days=1)
 
-for line in open('/tmp/cscap_sites.csv'):
+for line in open('cscap_sites.csv'):
     lon, lat, station = line.strip().split(",")
     do(float(lon), float(lat), station)
     
