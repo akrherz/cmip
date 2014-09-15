@@ -49,14 +49,14 @@ def do(lon, lat, station):
     while now < t1:
         high = float(highs[k])
         low = float(lows[k])
+        if low > high:
+            # Swap, sigh
+            print '%s %s high: %.1f low: %.1f was swapped' % (
+                        now.strftime("%m-%d-%Y"), station, high, low)
+            high2 = high
+            high = low
+            low = high2
         precip = float(precips[k])
-        #print now, high, low, precip
-        #if highs.mask[k]:
-        #    high = None
-        #if lows.mask[k]:
-        #    low = None
-        #if precips.mask[k]:
-        #    precip = None
         cursor.execute("""
         INSERT into hayhoe_daily(model, scenario, station, day, high, low,
         precip) values (%s, %s, %s, %s, %s, %s, %s)
