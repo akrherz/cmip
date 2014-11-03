@@ -39,6 +39,8 @@ t1idx = (t1 - basets).days
 for i, lon in enumerate(lons):
     print "%s/%s" % (i, len(lons))
     for j, lat in enumerate(lats):
+        if lon < 262 or lon > 283 or lat < 34 or lat > 48:
+            continue
         precip = pr_nc.variables['pr'][t0idx:t1idx,j,i]
         tasmax = tasmax_nc.variables['tmax'][t0idx:t1idx,j,i]
         tasmin = tasmin_nc.variables['tmin'][t0idx:t1idx,j,i]
