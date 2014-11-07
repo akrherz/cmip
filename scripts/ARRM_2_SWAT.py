@@ -64,8 +64,14 @@ for i, lon in enumerate(lons):
         while now < t1:
             pfp.write("%s%03i%5.1f\n" % (now.year, float(now.strftime("%j")),
                 precip[k]))
+            tmax = tasmax[k]
+            tmin = tasmin[k]
+            if tmax < tmin:
+                tmp = tmin
+                tmin = tmax
+                tmax = tmp
             tfp.write("%s%03i%5.1f%5.1f\n" % (now.year, 
-                float(now.strftime("%j")), tasmax[k], tasmin[k]))
+                float(now.strftime("%j")), tmax, tmin))
             k += 1
             now += datetime.timedelta(days=1)
         pfp.close()
