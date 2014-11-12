@@ -27,14 +27,12 @@ tasmax_nc = netCDF4.Dataset(('/tera13/akrherz/hayhoe/'
 lons = pr_nc.variables['lon'][:]
 lats = pr_nc.variables['lat'][:]
 
-t0 = basets + datetime.timedelta(days=float(pr_nc.variables['time'][0]))
-t1 = basets + datetime.timedelta(days=float(pr_nc.variables['time'][-1]))
-print t0, t1
+# The calendar is 365 day, so we have some concerns to deal with
+t0idx = (2046-1960) * 365
+t1idx = (2066-1960) * 365
 
 t0 = datetime.datetime(2046,1,1)
 t1 = datetime.datetime(2066,1,1)
-t0idx = (t0 - basets).days
-t1idx = (t1 - basets).days
 
 for i, lon in enumerate(lons):
     print "%s/%s" % (i, len(lons))
@@ -62,6 +60,12 @@ for i, lon in enumerate(lons):
         now = t0
         k = 0
         while now < t1:
+            if now.month == 2 and now.day == 29:
+                pfp.write("%s%03i%5.1f\n" % (now.year, float(now.strftime("%j")),
+                                                             -99))
+                tfp.write("%s%03i%5.1f%5.1f\n" % (now.year, 
+                                    float(now.strftime("%j")), -99, -99))
+                now += datetime.timedelta(days=1)
             pfp.write("%s%03i%5.1f\n" % (now.year, float(now.strftime("%j")),
                 precip[k]))
             tmax = tasmax[k]
