@@ -1,5 +1,19 @@
 '''
-  Convert the downscaled Hayhoe data into something SWAT wants/likes
+Copy the Hayhoe data into my local database
+
+   model   | scenario 
+-----------+----------
+ echam5    | a1b x
+ echo      | a1b x
+ cnrm      | a1b x
+ cgcm3_t47 | a1b x
+ miroc_hi  | a1b x
+ hadgem    | a1b x
+ cgcm3_t63 | a1b x
+ hadcm3    | a1b x
+ pcm       | a1b x
+ giss_aom  | a1b x
+
 '''
 import netCDF4
 import datetime
@@ -21,32 +35,36 @@ tasmin_nc = netCDF4.Dataset('/tera13/akrherz/hayhoe/%s.%s.tmin.NAm.grid.1960.209
 tokens = (pr_nc.variables['time'].units).replace("days since ", "").split("-")
 basets = datetime.datetime( int(tokens[0]), int(tokens[1]), int(tokens[2]) )
 
+tmdata = pr_nc.variables['time'][:]
+print basets, np.shape(tmdata)[0] / 365.0
+
 # Files have degrees east 0-360, so 190 is -170 , 200 is -160
 lons = pr_nc.variables['lon'][:] - 360.0
 lats = pr_nc.variables['lat'][:]
-
-t0 = datetime.datetime(2001,1,1)
-t1 = datetime.datetime(2099,1,1)
-t0idx = int((t0 - basets).days)
-t1idx = int((t1 - basets).days)
 
 def do(lon, lat, station):
 
     idx = np.digitize([lon,], lons)[0]
     jdx = np.digitize([lat,], lats)[0]
 
-    pdata = pr_nc.variables['pr'][t0idx:t1idx,jdx,idx]
-    xdata = tasmax_nc.variables['tmax'][t0idx:t1idx,jdx,idx]
-    ndata = tasmin_nc.variables['tmin'][t0idx:t1idx,jdx,idx]
+    pdata = pr_nc.variables['pr'][:,jdx,idx]
+    xdata = tasmax_nc.variables['tmax'][:,jdx,idx]
+    ndata = tasmin_nc.variables['tmin'][:,jdx,idx]
 
     highs = temperature(xdata, 'C').value('F')
     lows = temperature(ndata, 'C').value('F')
     precips = pdata / 24.5
 
-
-    now = t0
-    k = 0
-    while now < t1:
+    now = basets
+    for k, val in enumerate(tmdata):
+        now += datetime.timedelta(days=1)
+        if now.month == 2 and now.day == 29:
+            # Insert missing data
+            cursor.execute("""
+        INSERT into hayhoe_daily(model, scenario, station, day, high, low,
+        precip) values (%s, %s, %s, %s, %s, %s, %s)
+        """, (model, scenario, station, now, high, low, precip))            
+            now += datetime.timedelta(days=1)
         high = float(highs[k])
         low = float(lows[k])
         if low > high:
@@ -61,11 +79,11 @@ def do(lon, lat, station):
         INSERT into hayhoe_daily(model, scenario, station, day, high, low,
         precip) values (%s, %s, %s, %s, %s, %s, %s)
         """, (model, scenario, station, now, high, low, precip))
-        k += 1
-        now += datetime.timedelta(days=1)
+            
 
 for line in open('cscap_sites.csv'):
     lon, lat, station = line.strip().split(",")
+    print 'Processing %s' % (station,)
     do(float(lon), float(lat), station)
     
 cursor.close()
