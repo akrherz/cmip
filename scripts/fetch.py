@@ -1,10 +1,7 @@
 import urllib2
+from pyiem.network import Table as NetworkTable
 
-xref = {'MO1791': 'BRADFORD',
-        'IA6719': 'GILMORE',
-        'IA0200': 'ISUAG',
-        'IN6435': 'SEPAC',
-        'MI3504': 'KELLOGG'}
+nt = NetworkTable("CSCAP")
 
 models = ['miroc_hi',
  'cgcm3_t47',
@@ -17,19 +14,20 @@ models = ['miroc_hi',
  'cnrm', 
  'pcm']
 
-for model in models:
-    for station in xref.keys():
-        print 'Running %s %s' % (model, station)
+for sid in nt.sts.keys():
+    climatesite = nt.sts[sid]['climate_site']
+    for model in models:
+        print 'Running %s %s %s' % (model, climatesite, sid)
         uri = ("http://iem.local/cgi-bin/request/coop.py?network=%sCLIMATE&"
-         +"station[]=%s&year1=2005&month1=1&day1=1&"
-         +"year2=2099&month2=1&day2=1&vars[]=daycent&"
-         +"hayhoe_scenario=a1b&hayhoe_model=%s&"
-         +"what=view&delim=comma&gis=no&scenario_year=2013") % (station[:2],
-                                                              station, model)
+               +"station[]=%s&year1=2005&month1=1&day1=1&"
+               +"year2=2099&month2=1&day2=1&vars[]=apsim&"
+               +"hayhoe_scenario=a1b&hayhoe_model=%s&"
+               +"what=view&delim=comma&gis=no&scenario_year=2013") % (
+                climatesite[:2], climatesite, model)
          
         data = urllib2.urlopen(uri).read()
         
-        outfn = "data/%s_%s_%s.txt" % (xref[station], model, 'a1b')
+        outfn = "data/%s_%s_%s.txt" % (sid, model, 'a1b')
         o = open(outfn, 'w')
         o.write(data)
         o.close()
