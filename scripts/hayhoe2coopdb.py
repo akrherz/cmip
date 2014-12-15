@@ -3,16 +3,16 @@ Copy the Hayhoe data into my local database
 
    model   | scenario 
 -----------+----------
- echam5    | a1b xf
- echo      | a1b xf
- cnrm      | a1b xf
- cgcm3_t47 | a1b xf
- miroc_hi  | a1b xf
- hadgem    | a1b x
- cgcm3_t63 | a1b x
- hadcm3    | a1b 
- pcm       | a1b 
- giss_aom  | a1b 
+ echam5    | a1b -done-
+ echo      | a1b -done-
+ cnrm      | a1b -done-
+ cgcm3_t47 | a1b missing one year
+ miroc_hi  | a1b missing a number of years
+ hadgem    | a1b -done-
+ cgcm3_t63 | a1b missing one year
+ hadcm3    | a1b missing a number of years
+ pcm       | a1b missing Nov, Dec 2099
+ giss_aom  | a1b missing a number of years
 
 """
 import netCDF4
