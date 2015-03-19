@@ -1,7 +1,7 @@
 """
 Copy the Hayhoe data into my local database
 
-   model   | scenario 
+   model   | scenario
 -----------+----------
  echam5    | a1b -done-
  echo      | a1b -done-
@@ -34,23 +34,23 @@ done = []
 
 BASE = "/tera13/akrherz/hayhoe"
 
-pr_nc = netCDF4.Dataset('%s/%s.%s.pr.NAm.grid.1960.2099.nc' % (BASE,
-                                                model, scenario))
-tasmax_nc = netCDF4.Dataset('%s/%s.%s.tmax.NAm.grid.1960.2099.nc' % (BASE,
-                                                model, scenario))
-tasmin_nc = netCDF4.Dataset('%s/%s.%s.tmin.NAm.grid.1960.2099.nc' % (BASE,
-                                                model, scenario))
+pr_nc = netCDF4.Dataset(('%s/%s.%s.pr.NAm.grid.1960.2099.nc'
+                         ) % (BASE, model, scenario))
+tasmax_nc = netCDF4.Dataset(('%s/%s.%s.tmax.NAm.grid.1960.2099.nc'
+                             ) % (BASE, model, scenario))
+tasmin_nc = netCDF4.Dataset(('%s/%s.%s.tmin.NAm.grid.1960.2099.nc'
+                             ) % (BASE, model, scenario))
 
 tokens = (pr_nc.variables['time'].units).replace("days since ", "").split("-")
-basets = datetime.date( int(tokens[0]), int(tokens[1]), int(tokens[2]) )
+basets = datetime.date(int(tokens[0]), int(tokens[1]), int(tokens[2]))
 
 tmdata = pr_nc.variables['time'][:]
-if basets != datetime.date(1959,12,31):
+if basets != datetime.date(1959, 12, 31):
     print('FAILURE, basets %s is not 31 Dec 1959' % (basets,))
     sys.exit()
 if (np.shape(tmdata)[0] / 365.0) != 140:
-    print('FAILURE, %s years found, not exactly 140' % (
-                                    np.shape(tmdata)[0] / 365.0,))
+    print(('FAILURE, %s years found, not exactly 140'
+           ) % (np.shape(tmdata)[0] / 365.0,))
     sys.exit()
 
 # Files have degrees east 0-360, so 190 is -170 , 200 is -160
@@ -64,6 +64,7 @@ def fix(val):
         return None
     return float(val)
 
+
 def insert(station, now, high, low, precip):
     """ Add a database entry """
     cursor.execute("""
@@ -71,15 +72,16 @@ def insert(station, now, high, low, precip):
     VALUES (%s, %s, %s, %s, %s, %s, %s)
     """, (model, scenario, station, now, high, low, precip))
 
+
 def do(lon, lat, station):
     """ Process this station and geography """
-    idx = np.digitize([lon,], lons)[0]
-    jdx = np.digitize([lat,], lats)[0]
+    idx = np.digitize([lon, ], lons)[0]
+    jdx = np.digitize([lat, ], lats)[0]
     print("--> Processing %s i:%s j:%s" % (station, idx, jdx))
 
-    pdata = pr_nc.variables['pr'][:,jdx,idx]
-    xdata = tasmax_nc.variables['tmax'][:,jdx,idx]
-    ndata = tasmin_nc.variables['tmin'][:,jdx,idx]
+    pdata = pr_nc.variables['pr'][:, jdx, idx]
+    xdata = tasmax_nc.variables['tmax'][:, jdx, idx]
+    ndata = tasmin_nc.variables['tmin'][:, jdx, idx]
 
     highs = temperature(xdata, 'C').value('F')
     lows = temperature(ndata, 'C').value('F')
@@ -91,27 +93,29 @@ def do(lon, lat, station):
         now += datetime.timedelta(days=1)
         if now.month == 2 and now.day == 29:
             # Insert missing data
-            insert(station, now, high, low, precip)           
+            insert(station, now, high, low, precip)
             now += datetime.timedelta(days=1)
         high = fix(highs[k])
         low = fix(lows[k])
         if low is not None and high is not None and low > high:
             # Swap, sigh
-            print('%s %s high: %.1f low: %.1f was swapped' % (
-                        now.strftime("%m-%d-%Y"), station, high, low))
+            print(('%s %s high: %.1f low: %.1f was swapped'
+                   ) % (now.strftime("%m-%d-%Y"), station, high, low))
             high2 = high
             high = low
             low = high2
         precip = fix(precips[k])
         insert(station, now, high, low, precip)
 
-for sid in nt.sts.keys():
-    climatesite = nt.sts[sid]['climate_site']
-    if climatesite in done:
-        continue
-    done.append(climatesite)
-    do(nt.sts[sid]['lon'], nt.sts[sid]['lat'], climatesite)
-    
+do(-122.83, 38.40, 'BDCAL')
+do(-87.87, 46.81, 'BDMIC')
+# for sid in nt.sts.keys():
+#    climatesite = nt.sts[sid]['climate_site']
+#    if climatesite in done:
+#        continue
+#    done.append(climatesite)
+#    do(nt.sts[sid]['lon'], nt.sts[sid]['lat'], climatesite)
+
 cursor.close()
 PGCONN.commit()
 PGCONN.close()
