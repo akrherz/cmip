@@ -6,8 +6,6 @@ rsds
   netcdf units: Wm^-2    multiply by 86,400 divide by 1,000,000
   swat file has: MJ / day
 """
-
-import netCDF4
 import datetime
 import numpy
 from scipy import interpolate
@@ -15,11 +13,13 @@ import util
 import sys
 
 model = sys.argv[1]
+MYDIR = "/tera13/akrherz/cmip3_monthly"
 
-nc_20c_uas = netCDF4.Dataset('../%s/20c3m/uas_A1_1860-2000.nc' % (model,))
-nc_20c_vas = netCDF4.Dataset('../%s/20c3m/vas_A1_1860-2000.nc' % (model,))
-nc_a1b_uas = netCDF4.Dataset('../%s/sresa1b/uas_A1_2000-2100.nc' % (model,))
-nc_a1b_vas = netCDF4.Dataset('../%s/sresa1b/vas_A1_2000-2100.nc' % (model,))
+nc_20c_uas = util.find_file(model, '20c3m', 'uas')
+nc_20c_vas = util.find_file(model, '20c3m', 'vas')
+nc_a1b_uas = util.find_file(model, 'sresa1b', 'uas')
+nc_a1b_vas = util.find_file(model, 'sresa1b', 'vas')
+
 lats = nc_20c_uas.variables['lat'][:]
 lons = nc_20c_uas.variables['lon'][:]
 
@@ -61,10 +61,8 @@ oct_T = interpolate.RectBivariateSpline(lats, lons, october)
 nov_T = interpolate.RectBivariateSpline(lats, lons, nov)
 dec_T = interpolate.RectBivariateSpline(lats, lons, dec)
 
-
-
-o = open('../%s/WG_SWAT2009_F_SRAD_WND.csv' % (model,), 'w')
-for i, line in enumerate(open('../%s/WG_SWAT2009_F_SRAD.csv' % (model,))):
+o = open('%s_WG_SWAT2009_F_SRAD_WND.csv' % (model,), 'w')
+for i, line in enumerate(open('%s_WG_SWAT2009_F_SRAD.csv' % (model,))):
     if i == 0:
         o.write(line)
         continue

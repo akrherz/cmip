@@ -30,8 +30,6 @@ observed annual cycle of Td.
 
 
 """
-
-import netCDF4
 import datetime
 import numpy as np
 from scipy import interpolate
@@ -39,22 +37,23 @@ import util
 import sys
 
 model = sys.argv[1]
+MYDIR = "/tera13/akrherz/cmip3_monthly"
 
-nc_20c_ps = netCDF4.Dataset('../%s/20c3m/ps_A1_1860-2000.nc' % (model,))
-nc_20c_huss = netCDF4.Dataset('../%s/20c3m/huss_A1_1860-2000.nc' % (model,))
-nc_a1b_ps = netCDF4.Dataset('../%s/sresa1b/ps_A1_2000-2100.nc' % (model,))
-nc_a1b_huss = netCDF4.Dataset('../%s/sresa1b/huss_A1_2000-2100.nc' % (model,))
+nc_20c_ps = util.find_file(model, '20c3m', 'ps')
+nc_20c_huss = util.find_file(model, '20c3m', 'huss')
+nc_a1b_ps = util.find_file(model, 'sresa1b', 'ps')
+nc_a1b_huss = util.find_file(model, 'sresa1b', 'huss')
 
 lats = nc_20c_ps.variables['lat'][:]
 lons = nc_20c_ps.variables['lon'][:]
 
-idx1_20c = util.find_time_idx(nc_20c_ps, datetime.datetime(1981,1,1) )
-idx2_20c = util.find_time_idx(nc_20c_ps, datetime.datetime(1999,12,1) ) + 1
-idx1_a1b = util.find_time_idx(nc_a1b_ps, datetime.datetime(2046,1,1) )
-idx2_a1b = util.find_time_idx(nc_a1b_ps, datetime.datetime(2064,12,1) ) + 1
+idx1_20c = util.find_time_idx(nc_20c_ps, datetime.datetime(1981, 1, 1))
+idx2_20c = util.find_time_idx(nc_20c_ps, datetime.datetime(1999, 12, 1)) + 1
+idx1_a1b = util.find_time_idx(nc_a1b_ps, datetime.datetime(2046, 1, 1))
+idx2_a1b = util.find_time_idx(nc_a1b_ps, datetime.datetime(2064, 12, 1)) + 1
 
-ps_20c = nc_20c_ps.variables['ps'][idx1_20c:idx2_20c,:,:] / 100.0
-huss_20c = nc_20c_huss.variables['huss'][idx1_20c:idx2_20c,:,:]
+ps_20c = nc_20c_ps.variables['ps'][idx1_20c:idx2_20c, :, :] / 100.0
+huss_20c = nc_20c_huss.variables['huss'][idx1_20c:idx2_20c, :, :]
 r_20c = huss_20c / (1 - huss_20c)
 e_20c = r_20c * ps_20c / (0.622 + r_20c)
 e_20c = np.where(e_20c < 0.00000001, 0.00000001, e_20c)
@@ -150,10 +149,8 @@ oct_T = interpolate.RectBivariateSpline(lats, lons, october)
 nov_T = interpolate.RectBivariateSpline(lats, lons, nov)
 dec_T = interpolate.RectBivariateSpline(lats, lons, dec)
 
-
-
-o = open('../%s/WG_SWAT2009_F_SRAD_WND_DEW.csv' % (model,), 'w')
-for i, line in enumerate(open('../%s/WG_SWAT2009_F_SRAD_WND.csv' % (model,))):
+o = open('%s_WG_SWAT2009_F_SRAD_WND_DEW.csv' % (model,), 'w')
+for i, line in enumerate(open('%s_WG_SWAT2009_F_SRAD_WND.csv' % (model,))):
     if i == 0:
         o.write(line)
         continue

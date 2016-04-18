@@ -1,4 +1,20 @@
 import datetime
+import glob
+import netCDF4
+
+
+def find_file(model, scenario, varname):
+    m = "/tera13/akrherz/cmip3_monthly/%s/%s/%s*.nc" % (scenario, model,
+                                                        varname)
+    files = glob.glob(m)
+    if len(files) == 0:
+        print("NO FIND! %s %s %s" % (model, scenario, varname))
+    files.sort()
+    if scenario == '20c3m':
+        return netCDF4.Dataset(files[-1])
+    else:
+        return netCDF4.Dataset(files[0])
+
 
 def find_time_idx(nc, needle):
     ''' Find the time index '''
