@@ -17,11 +17,11 @@ if not os.path.isdir(outdir):
 
 basets = datetime.datetime(1959, 12, 31)
 
-pr_nc = netCDF4.Dataset(('/tera13/akrherz/hayhoe/'
+pr_nc = netCDF4.Dataset(('data/'
                          '%s.a1b.pr.NAm.grid.1960.2099.nc') % (MODEL,))
-tasmin_nc = netCDF4.Dataset(('/tera13/akrherz/hayhoe/'
+tasmin_nc = netCDF4.Dataset(('data/'
                              '%s.a1b.tmin.NAm.grid.1960.2099.nc') % (MODEL,))
-tasmax_nc = netCDF4.Dataset(('/tera13/akrherz/hayhoe/'
+tasmax_nc = netCDF4.Dataset(('data/'
                              '%s.a1b.tmax.NAm.grid.1960.2099.nc') % (MODEL,))
 
 lons = pr_nc.variables['lon'][:]
@@ -31,7 +31,7 @@ lats = pr_nc.variables['lat'][:]
 t0idx = (2046-1960) * 365
 t1idx = (2066-1960) * 365
 
-t0 = datetime.datetime(2046, 1, 1)
+t0 = datetime.datetime(2044, 1, 1)
 t1 = datetime.datetime(2066, 1, 1)
 
 for i, lon in enumerate(lons):

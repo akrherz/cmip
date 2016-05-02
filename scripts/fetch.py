@@ -14,25 +14,19 @@ models = ['miroc_hi',
           'cnrm',
           'pcm']
 
-models = ['cgcm3_t47',
-          'cgcm3_t63',
-          'echam5',
-          'cnrm',
-          'hadgem',
-          'echo',
-          'pcm']
+models = ['cgcm3_t63']
 
 
-for sid in nt.sts.keys():
-    climatesite = nt.sts[sid]['climate_site']
+for sid in ['BDNM', ]:
+    # climatesite = nt.sts[sid]['climate_site']
     for model in models:
-        print 'Running %s %s %s' % (model, climatesite, sid)
+        print 'Running %s %s %s' % (model, 'bogus', sid)
         uri = ("http://iem.local/cgi-bin/request/coop.py?network=%sCLIMATE&"
-               "station[]=%s&year1=2005&month1=1&day1=1&"
+               "station[]=%s&year1=1961&month1=1&day1=1&"
                "year2=2099&month2=1&day2=1&vars[]=daycent&"
                "hayhoe_scenario=a1b&hayhoe_model=%s&"
                "what=view&delim=comma&gis=no&scenario_year=2013"
-               ) % (climatesite[:2], climatesite, model)
+               ) % ('IA', sid, model)
 
         data = urllib2.urlopen(uri).read()
 
