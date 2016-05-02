@@ -107,8 +107,9 @@ def do(lon, lat, station):
         precip = fix(precips[k])
         insert(station, now, high, low, precip)
 
-do(-122.83, 38.40, 'BDCAL')
-do(-87.87, 46.81, 'BDMIC')
+# do(-122.83, 38.40, 'BDCAL')
+# do(-87.87, 46.81, 'BDMIC')
+do(-106.74, 32.62, 'BDNM')
 # for sid in nt.sts.keys():
 #    climatesite = nt.sts[sid]['climate_site']
 #    if climatesite in done:
