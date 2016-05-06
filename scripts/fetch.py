@@ -14,10 +14,10 @@ models = ['miroc_hi',
           'cnrm',
           'pcm']
 
-models = ['cgcm3_t63']
+models = ['cgcm3_t63', 'pcm', 'hadcm3', 'echo', 'cnrm']
 
 
-for sid in ['BDNM', ]:
+for sid in ['BDNM2', ]:
     # climatesite = nt.sts[sid]['climate_site']
     for model in models:
         print 'Running %s %s %s' % (model, 'bogus', sid)
