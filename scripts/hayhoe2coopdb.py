@@ -109,7 +109,15 @@ def do(lon, lat, station):
 
 # do(-122.83, 38.40, 'BDCAL')
 # do(-87.87, 46.81, 'BDMIC')
-do(-106.7, 34.36, 'BDNM2')
+# do(-106.7, 34.36, 'BDNM2')
+
+do(-111.97, 33.0589, 'BDMARI')
+do(-103.214, 34.601, 'BDCLOV')
+do(-106.764, 34.766, 'BDLOSL')
+do(-103.695, 35.194, 'BDTUCU')
+do(-119.803, 39.572, 'BDRENO')
+do(-118.7857, 39.4578, 'BDFALL')
+
 # for sid in nt.sts.keys():
 #    climatesite = nt.sts[sid]['climate_site']
 #    if climatesite in done:

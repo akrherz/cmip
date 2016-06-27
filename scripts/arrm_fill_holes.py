@@ -26,7 +26,7 @@ nt = NetworkTable("CSCAP")
 
 done = []
 # for sid in nt.sts.keys():
-for sid in ['BDNM2',]:
+for sid in ['BDMARI', 'BDCLOV', 'BDLOSL', 'BDTUCU', 'BDRENO', 'BDFALL']:
     # sid = nt.sts[sid]['climate_site']
     if sid in done:
         continue
