@@ -1,5 +1,5 @@
-cmip
-====
+cmip (not maintained)
+=====================
 
 1) MIROC 3.2 medres
 2) HADCM3
