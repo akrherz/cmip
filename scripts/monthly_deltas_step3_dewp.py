@@ -39,63 +39,63 @@ import sys
 model = sys.argv[1]
 MYDIR = "/tera13/akrherz/cmip3_monthly"
 
-nc_20c_ps = util.find_file(model, '20c3m', 'ps')
-nc_20c_huss = util.find_file(model, '20c3m', 'huss')
-nc_a1b_ps = util.find_file(model, 'sresa1b', 'ps')
-nc_a1b_huss = util.find_file(model, 'sresa1b', 'huss')
+nc_20c_ps = util.find_file(model, "20c3m", "ps")
+nc_20c_huss = util.find_file(model, "20c3m", "huss")
+nc_a1b_ps = util.find_file(model, "sresa1b", "ps")
+nc_a1b_huss = util.find_file(model, "sresa1b", "huss")
 
-lats = nc_20c_ps.variables['lat'][:]
-lons = nc_20c_ps.variables['lon'][:]
+lats = nc_20c_ps.variables["lat"][:]
+lons = nc_20c_ps.variables["lon"][:]
 
 idx1_20c = util.find_time_idx(nc_20c_ps, datetime.datetime(1981, 1, 1))
 idx2_20c = util.find_time_idx(nc_20c_ps, datetime.datetime(1999, 12, 1)) + 1
 idx1_a1b = util.find_time_idx(nc_a1b_ps, datetime.datetime(2046, 1, 1))
 idx2_a1b = util.find_time_idx(nc_a1b_ps, datetime.datetime(2064, 12, 1)) + 1
 
-ps_20c = nc_20c_ps.variables['ps'][idx1_20c:idx2_20c, :, :] / 100.0
-huss_20c = nc_20c_huss.variables['huss'][idx1_20c:idx2_20c, :, :]
+ps_20c = nc_20c_ps.variables["ps"][idx1_20c:idx2_20c, :, :] / 100.0
+huss_20c = nc_20c_huss.variables["huss"][idx1_20c:idx2_20c, :, :]
 r_20c = huss_20c / (1 - huss_20c)
 e_20c = r_20c * ps_20c / (0.622 + r_20c)
 e_20c = np.where(e_20c < 0.00000001, 0.00000001, e_20c)
 
-print np.shape(nc_a1b_ps.variables['ps'][:]), idx1_20c, idx2_20c
-ps_a1b = nc_a1b_ps.variables['ps'][idx1_a1b:idx2_a1b,:,:] / 100.0
-huss_a1b = nc_a1b_huss.variables['huss'][idx1_a1b:idx2_a1b,:,:]
+print np.shape(nc_a1b_ps.variables["ps"][:]), idx1_20c, idx2_20c
+ps_a1b = nc_a1b_ps.variables["ps"][idx1_a1b:idx2_a1b, :, :] / 100.0
+huss_a1b = nc_a1b_huss.variables["huss"][idx1_a1b:idx2_a1b, :, :]
 r_a1b = huss_a1b / (1 - huss_a1b)
 e_a1b = r_a1b * ps_a1b / (0.622 + r_a1b)
 e_a1b = np.where(e_a1b < 0.00000001, 0.00000001, e_a1b)
 
-a1b_jan = np.average(e_a1b[::12,:,:],0)
-a1b_feb = np.average(e_a1b[1::12,:,:],0)
-a1b_mar = np.average(e_a1b[2::12,:,:],0)
-a1b_apr = np.average(e_a1b[3::12,:,:],0)
-a1b_may = np.average(e_a1b[4::12,:,:],0)
-a1b_jun = np.average(e_a1b[5::12,:,:],0)
-for i in range(5, e_a1b.shape[0]+1,12):
-    print 'e', i, np.min(e_a1b[i,:,:]), np.max(e_a1b[i,:,:])
-    print 'ps', i, np.min(ps_a1b[i,:,:]), np.max(ps_a1b[i,:,:])
-    print 'huss', i, np.min(huss_a1b[i,:,:]), np.max(huss_a1b[i,:,:])
-print '-->a1b_jun', np.min(a1b_jun[:,:]), np.max(a1b_jun[:,:])
+a1b_jan = np.average(e_a1b[::12, :, :], 0)
+a1b_feb = np.average(e_a1b[1::12, :, :], 0)
+a1b_mar = np.average(e_a1b[2::12, :, :], 0)
+a1b_apr = np.average(e_a1b[3::12, :, :], 0)
+a1b_may = np.average(e_a1b[4::12, :, :], 0)
+a1b_jun = np.average(e_a1b[5::12, :, :], 0)
+for i in range(5, e_a1b.shape[0] + 1, 12):
+    print "e", i, np.min(e_a1b[i, :, :]), np.max(e_a1b[i, :, :])
+    print "ps", i, np.min(ps_a1b[i, :, :]), np.max(ps_a1b[i, :, :])
+    print "huss", i, np.min(huss_a1b[i, :, :]), np.max(huss_a1b[i, :, :])
+print "-->a1b_jun", np.min(a1b_jun[:, :]), np.max(a1b_jun[:, :])
 
-a1b_jul = np.average(e_a1b[6::12,:,:],0)
-a1b_aug = np.average(e_a1b[7::12,:,:],0)
-a1b_sep = np.average(e_a1b[8::12,:,:],0)
-a1b_oct = np.average(e_a1b[9::12,:,:],0)
-a1b_nov = np.average(e_a1b[10::12,:,:],0)
-a1b_dec = np.average(e_a1b[11::12,:,:],0)
+a1b_jul = np.average(e_a1b[6::12, :, :], 0)
+a1b_aug = np.average(e_a1b[7::12, :, :], 0)
+a1b_sep = np.average(e_a1b[8::12, :, :], 0)
+a1b_oct = np.average(e_a1b[9::12, :, :], 0)
+a1b_nov = np.average(e_a1b[10::12, :, :], 0)
+a1b_dec = np.average(e_a1b[11::12, :, :], 0)
 
-c20_jan = np.average(e_20c[::12,:,:],0)
-c20_feb = np.average(e_20c[1::12,:,:],0)
-c20_mar = np.average(e_20c[2::12,:,:],0)
-c20_apr = np.average(e_20c[3::12,:,:],0)
-c20_may = np.average(e_20c[4::12,:,:],0)
-c20_jun = np.average(e_20c[5::12,:,:],0)
-c20_jul = np.average(e_20c[6::12,:,:],0)
-c20_aug = np.average(e_20c[7::12,:,:],0)
-c20_sep = np.average(e_20c[8::12,:,:],0)
-c20_oct = np.average(e_20c[9::12,:,:],0)
-c20_nov = np.average(e_20c[10::12,:,:],0)
-c20_dec = np.average(e_20c[11::12,:,:],0)
+c20_jan = np.average(e_20c[::12, :, :], 0)
+c20_feb = np.average(e_20c[1::12, :, :], 0)
+c20_mar = np.average(e_20c[2::12, :, :], 0)
+c20_apr = np.average(e_20c[3::12, :, :], 0)
+c20_may = np.average(e_20c[4::12, :, :], 0)
+c20_jun = np.average(e_20c[5::12, :, :], 0)
+c20_jul = np.average(e_20c[6::12, :, :], 0)
+c20_aug = np.average(e_20c[7::12, :, :], 0)
+c20_sep = np.average(e_20c[8::12, :, :], 0)
+c20_oct = np.average(e_20c[9::12, :, :], 0)
+c20_nov = np.average(e_20c[10::12, :, :], 0)
+c20_dec = np.average(e_20c[11::12, :, :], 0)
 
 a1b_jan_td = (243.5 * np.log10(a1b_jan) - 440.8) / (19.48 - np.log10(a1b_jan))
 a1b_feb_td = (243.5 * np.log10(a1b_feb) - 440.8) / (19.48 - np.log10(a1b_feb))
@@ -149,14 +149,14 @@ oct_T = interpolate.RectBivariateSpline(lats, lons, october)
 nov_T = interpolate.RectBivariateSpline(lats, lons, nov)
 dec_T = interpolate.RectBivariateSpline(lats, lons, dec)
 
-o = open('%s_WG_SWAT2009_F_SRAD_WND_DEW.csv' % (model,), 'w')
-for i, line in enumerate(open('%s_WG_SWAT2009_F_SRAD_WND.csv' % (model,))):
+o = open("%s_WG_SWAT2009_F_SRAD_WND_DEW.csv" % (model,), "w")
+for i, line in enumerate(open("%s_WG_SWAT2009_F_SRAD_WND.csv" % (model,))):
     if i == 0:
         o.write(line)
         continue
-    tokens = line.split(',')
-    lat = float( tokens[6] )
-    lon = float( tokens[7] )
+    tokens = line.split(",")
+    lat = float(tokens[6])
+    lon = float(tokens[7])
     old = tokens[-24:-12]
     if i % 235 == 0:
         print tokens[4]
@@ -164,20 +164,20 @@ for i, line in enumerate(open('%s_WG_SWAT2009_F_SRAD_WND.csv' % (model,))):
         for j in range(12):
             print "%5.2f" % (d[j]),
         print
-    old[0] = "%.2f" % ( float(old[0]) + (jan_T(lat, lon) ))
-    old[1] = "%.2f" % ( float(old[1]) + (feb_T(lat, lon) ))
-    old[2] = "%.2f" % ( float(old[2]) + (mar_T(lat, lon) ))
-    old[3] = "%.2f" % ( float(old[3]) + (apr_T(lat, lon) ))
-    old[4] = "%.2f" % ( float(old[4]) + (may_T(lat, lon) ))
-    old[5] = "%.2f" % ( float(old[5]) + (jun_T(lat, lon) ))
-    old[6] = "%.2f" % ( float(old[6]) + (jul_T(lat, lon) ))
-    old[7] = "%.2f" % ( float(old[7]) + (aug_T(lat, lon) ))
-    old[8] = "%.2f" % ( float(old[8]) + (sep_T(lat, lon) ))
-    old[9] = "%.2f" % ( float(old[9]) + (oct_T(lat, lon) ))
-    old[10] = "%.2f" % ( float(old[10]) + (nov_T(lat, lon) ))
-    old[11] = "%.2f" % ( float(old[11]) + (dec_T(lat, lon) ))
+    old[0] = "%.2f" % (float(old[0]) + (jan_T(lat, lon)))
+    old[1] = "%.2f" % (float(old[1]) + (feb_T(lat, lon)))
+    old[2] = "%.2f" % (float(old[2]) + (mar_T(lat, lon)))
+    old[3] = "%.2f" % (float(old[3]) + (apr_T(lat, lon)))
+    old[4] = "%.2f" % (float(old[4]) + (may_T(lat, lon)))
+    old[5] = "%.2f" % (float(old[5]) + (jun_T(lat, lon)))
+    old[6] = "%.2f" % (float(old[6]) + (jul_T(lat, lon)))
+    old[7] = "%.2f" % (float(old[7]) + (aug_T(lat, lon)))
+    old[8] = "%.2f" % (float(old[8]) + (sep_T(lat, lon)))
+    old[9] = "%.2f" % (float(old[9]) + (oct_T(lat, lon)))
+    old[10] = "%.2f" % (float(old[10]) + (nov_T(lat, lon)))
+    old[11] = "%.2f" % (float(old[11]) + (dec_T(lat, lon)))
     for j in range(12):
-        tokens[-24+j] = old[j]
+        tokens[-24 + j] = old[j]
     if i % 235 == 0:
         d = map(float, old)
         for j in range(12):
