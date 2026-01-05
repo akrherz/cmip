@@ -1,7 +1,5 @@
-"""Need to compute
+"""Need to compute"""
 
-
-"""
 import psycopg2
 import pyiem.reference as reference
 from pyiem.datatypes import distance, temperature

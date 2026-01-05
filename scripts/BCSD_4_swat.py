@@ -1,6 +1,7 @@
 """
- Dump out what the monthly deltas should be
+Dump out what the monthly deltas should be
 """
+
 import netCDF4
 import datetime
 import numpy

@@ -1,6 +1,6 @@
 """
-  We have MIROC3_2_MEDRES
-    - 
+We have MIROC3_2_MEDRES
+  -
 """
 
 import matplotlib.pyplot as plt

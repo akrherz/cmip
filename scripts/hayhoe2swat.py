@@ -1,6 +1,7 @@
 """
-  Convert the downscaled Hayhoe data into something SWAT wants/likes
+Convert the downscaled Hayhoe data into something SWAT wants/likes
 """
+
 import netCDF4
 import datetime
 import numpy as np
