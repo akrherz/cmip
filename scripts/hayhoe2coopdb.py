@@ -15,6 +15,7 @@ Copy the Hayhoe data into my local database
  giss_aom  | a1b missing a number of years
 
 """
+
 import netCDF4
 import datetime
 import numpy as np
@@ -64,14 +65,14 @@ lats = pr_nc.variables["lat"][:]
 
 
 def fix(val):
-    """ Convert a value into something reasonable """
+    """Convert a value into something reasonable"""
     if np.ma.is_masked(val):
         return None
     return float(val)
 
 
 def insert(station, now, high, low, precip):
-    """ Add a database entry """
+    """Add a database entry"""
     cursor.execute(
         """
     INSERT into hayhoe_daily(model, scenario, station, day, high, low, precip)
@@ -82,7 +83,7 @@ def insert(station, now, high, low, precip):
 
 
 def do(lon, lat, station):
-    """ Process this station and geography """
+    """Process this station and geography"""
     idx = np.digitize([lon], lons)[0]
     jdx = np.digitize([lat], lats)[0]
     print("--> Processing %s i:%s j:%s" % (station, idx, jdx))
